@@ -25,6 +25,20 @@
     </nav>
 
     <main class="container py-5">
+      <div
+        class="alert alert-success alert-dismissible fade show"
+        role="alert"
+        th:if="${successMessage}"
+      >
+        <span th:text="${successMessage}">Operation completed successfully.</span>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Task List</h1>
 
@@ -91,5 +105,9 @@
         </div>
       </div>
     </main>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
   </body>
 </html>

@@ -45,11 +45,13 @@
                 class="form-control"
                 type="text"
                 maxlength="100"
+                required
                 th:field="*{title}"
+                th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'"
               />
 
               <div
-                class="text-danger mt-1"
+                class="invalid-feedback"
                 th:if="${#fields.hasErrors('title')}"
                 th:errors="*{title}"
               ></div>
@@ -64,8 +66,15 @@
                 rows="4"
                 maxlength="500"
                 th:field="*{description}"
+                th:classappend="${#fields.hasErrors('description')} ? 'is-invalid'"
               >
               </textarea>
+
+              <div
+                class="invalid-feedback"
+                th:if="${#fields.hasErrors('description')}"
+                th:errors="*{description}"
+              ></div>
             </div>
 
             <div class="mb-3">
@@ -75,18 +84,38 @@
                 id="dueDate"
                 class="form-control"
                 type="date"
+                required
                 th:field="*{dueDate}"
+                th:classappend="${#fields.hasErrors('dueDate')} ? 'is-invalid'"
               />
+
+              <div
+                class="invalid-feedback"
+                th:if="${#fields.hasErrors('dueDate')}"
+                th:errors="*{dueDate}"
+              ></div>
             </div>
 
             <div class="mb-4">
               <label for="status" class="form-label">Status</label>
 
-              <select id="status" class="form-select" th:field="*{status}">
+              <select
+                id="status"
+                class="form-select"
+                required
+                th:field="*{status}"
+                th:classappend="${#fields.hasErrors('status')} ? 'is-invalid'"
+              >
                 <option value="Pending">Pending</option>
                 <option value="In Progress">In Progress</option>
                 <option value="Completed">Completed</option>
               </select>
+
+              <div
+                class="invalid-feedback"
+                th:if="${#fields.hasErrors('status')}"
+                th:errors="*{status}"
+              ></div>
             </div>
 
             <button class="btn btn-primary" type="submit">Save Task</button>

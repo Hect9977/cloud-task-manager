@@ -12,7 +12,7 @@
 	<artifactId>cloud-task-manager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>cloud-task-manager</name>
-	<description/>
+	<description>Spring Boot task management application with MySQL CRUD operations</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -30,6 +30,10 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>

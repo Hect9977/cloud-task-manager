@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.cloud_task_manager.exception.TaskNotFoundException;
 import com.cloud_task_manager.model.Task;
 import com.cloud_task_manager.repository.TaskRepository;
 
@@ -21,24 +22,48 @@ public class TaskService {
     }
 
     public List<Task> getAllTasks() {
-        logger.info("Retrieving all tasks");
-        return taskRepository.findAll();
+        logger.debug("Retrieving all tasks from the database");
+        List<Task> tasks = taskRepository.findAll();
+        logger.info("Retrieved {} task(s)", tasks.size());
+        return tasks;
     }
 
     public Task getTaskById(Long id) {
-        logger.info("Retrieving task with ID: {}", id);
+        logger.debug("Looking up task with ID {}", id);
 
         return taskRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Task not found: " + id));
+                .orElseThrow(() -> {
+                    logger.warn("Task with ID {} was not found", id);
+                    return new TaskNotFoundException(id);
+                });
     }
 
     public Task saveTask(Task task) {
-        logger.info("Saving task: {}", task.getTitle());
-        return taskRepository.save(task);
+        boolean isNewTask = task.getId() == null;
+
+        if (!isNewTask && !taskRepository.existsById(task.getId())) {
+            logger.warn("Cannot update missing task with ID {}", task.getId());
+            throw new TaskNotFoundException(task.getId());
+        }
+
+        logger.info("{} task: id={}, title={}",
+                isNewTask ? "Creating" : "Updating",
+                task.getId(),
+                task.getTitle());
+
+        Task savedTask = taskRepository.save(task);
+        logger.info("Task saved successfully with ID {}", savedTask.getId());
+        return savedTask;
     }
 
     public void deleteTask(Long id) {
-        logger.info("Deleting task with ID: {}", id);
+        if (!taskRepository.existsById(id)) {
+            logger.warn("Cannot delete missing task with ID {}", id);
+            throw new TaskNotFoundException(id);
+        }
+
+        logger.info("Deleting task with ID {}", id);
         taskRepository.deleteById(id);
+        logger.info("Task with ID {} was deleted successfully", id);
     }
 }
